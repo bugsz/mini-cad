@@ -5,6 +5,9 @@ file(REMOVE_RECURSE
   "CMakeFiles/mini-cad.dir/include/random.c.obj"
   "CMakeFiles/mini-cad.dir/include/simpio.c.obj"
   "CMakeFiles/mini-cad.dir/include/strlib.c.obj"
+  "CMakeFiles/mini-cad.dir/utils/acllib.c.obj"
+  "CMakeFiles/mini-cad.dir/utils/linkedlist.c.obj"
+  "CMakeFiles/mini-cad.dir/utils/list.c.obj"
   "libmini-cad.a"
   "libmini-cad.pdb"
 )

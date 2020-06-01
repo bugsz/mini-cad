@@ -160,6 +160,48 @@ CMakeFiles/mini-cad.dir/include/strlib.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mini-cad.dir/include/strlib.c.s"
 	gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\sz\Desktop\c-hw\mini-cad\include\strlib.c -o CMakeFiles\mini-cad.dir\include\strlib.c.s
 
+CMakeFiles/mini-cad.dir/utils/acllib.c.obj: CMakeFiles/mini-cad.dir/flags.make
+CMakeFiles/mini-cad.dir/utils/acllib.c.obj: CMakeFiles/mini-cad.dir/includes_C.rsp
+CMakeFiles/mini-cad.dir/utils/acllib.c.obj: ../utils/acllib.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\sz\Desktop\c-hw\mini-cad\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/mini-cad.dir/utils/acllib.c.obj"
+	gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\mini-cad.dir\utils\acllib.c.obj   -c C:\Users\sz\Desktop\c-hw\mini-cad\utils\acllib.c
+
+CMakeFiles/mini-cad.dir/utils/acllib.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mini-cad.dir/utils/acllib.c.i"
+	gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\sz\Desktop\c-hw\mini-cad\utils\acllib.c > CMakeFiles\mini-cad.dir\utils\acllib.c.i
+
+CMakeFiles/mini-cad.dir/utils/acllib.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mini-cad.dir/utils/acllib.c.s"
+	gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\sz\Desktop\c-hw\mini-cad\utils\acllib.c -o CMakeFiles\mini-cad.dir\utils\acllib.c.s
+
+CMakeFiles/mini-cad.dir/utils/linkedlist.c.obj: CMakeFiles/mini-cad.dir/flags.make
+CMakeFiles/mini-cad.dir/utils/linkedlist.c.obj: CMakeFiles/mini-cad.dir/includes_C.rsp
+CMakeFiles/mini-cad.dir/utils/linkedlist.c.obj: ../utils/linkedlist.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\sz\Desktop\c-hw\mini-cad\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/mini-cad.dir/utils/linkedlist.c.obj"
+	gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\mini-cad.dir\utils\linkedlist.c.obj   -c C:\Users\sz\Desktop\c-hw\mini-cad\utils\linkedlist.c
+
+CMakeFiles/mini-cad.dir/utils/linkedlist.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mini-cad.dir/utils/linkedlist.c.i"
+	gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\sz\Desktop\c-hw\mini-cad\utils\linkedlist.c > CMakeFiles\mini-cad.dir\utils\linkedlist.c.i
+
+CMakeFiles/mini-cad.dir/utils/linkedlist.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mini-cad.dir/utils/linkedlist.c.s"
+	gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\sz\Desktop\c-hw\mini-cad\utils\linkedlist.c -o CMakeFiles\mini-cad.dir\utils\linkedlist.c.s
+
+CMakeFiles/mini-cad.dir/utils/list.c.obj: CMakeFiles/mini-cad.dir/flags.make
+CMakeFiles/mini-cad.dir/utils/list.c.obj: CMakeFiles/mini-cad.dir/includes_C.rsp
+CMakeFiles/mini-cad.dir/utils/list.c.obj: ../utils/list.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\sz\Desktop\c-hw\mini-cad\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/mini-cad.dir/utils/list.c.obj"
+	gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\mini-cad.dir\utils\list.c.obj   -c C:\Users\sz\Desktop\c-hw\mini-cad\utils\list.c
+
+CMakeFiles/mini-cad.dir/utils/list.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mini-cad.dir/utils/list.c.i"
+	gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\sz\Desktop\c-hw\mini-cad\utils\list.c > CMakeFiles\mini-cad.dir\utils\list.c.i
+
+CMakeFiles/mini-cad.dir/utils/list.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mini-cad.dir/utils/list.c.s"
+	gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\sz\Desktop\c-hw\mini-cad\utils\list.c -o CMakeFiles\mini-cad.dir\utils\list.c.s
+
 # Object files for target mini-cad
 mini__cad_OBJECTS = \
 "CMakeFiles/mini-cad.dir/include/exceptio.c.obj" \
@@ -167,7 +209,10 @@ mini__cad_OBJECTS = \
 "CMakeFiles/mini-cad.dir/include/graphics.c.obj" \
 "CMakeFiles/mini-cad.dir/include/random.c.obj" \
 "CMakeFiles/mini-cad.dir/include/simpio.c.obj" \
-"CMakeFiles/mini-cad.dir/include/strlib.c.obj"
+"CMakeFiles/mini-cad.dir/include/strlib.c.obj" \
+"CMakeFiles/mini-cad.dir/utils/acllib.c.obj" \
+"CMakeFiles/mini-cad.dir/utils/linkedlist.c.obj" \
+"CMakeFiles/mini-cad.dir/utils/list.c.obj"
 
 # External object files for target mini-cad
 mini__cad_EXTERNAL_OBJECTS =
@@ -178,9 +223,12 @@ libmini-cad.a: CMakeFiles/mini-cad.dir/include/graphics.c.obj
 libmini-cad.a: CMakeFiles/mini-cad.dir/include/random.c.obj
 libmini-cad.a: CMakeFiles/mini-cad.dir/include/simpio.c.obj
 libmini-cad.a: CMakeFiles/mini-cad.dir/include/strlib.c.obj
+libmini-cad.a: CMakeFiles/mini-cad.dir/utils/acllib.c.obj
+libmini-cad.a: CMakeFiles/mini-cad.dir/utils/linkedlist.c.obj
+libmini-cad.a: CMakeFiles/mini-cad.dir/utils/list.c.obj
 libmini-cad.a: CMakeFiles/mini-cad.dir/build.make
 libmini-cad.a: CMakeFiles/mini-cad.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\sz\Desktop\c-hw\mini-cad\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking C static library libmini-cad.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\sz\Desktop\c-hw\mini-cad\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking C static library libmini-cad.a"
 	$(CMAKE_COMMAND) -P CMakeFiles\mini-cad.dir\cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\mini-cad.dir\link.txt --verbose=$(VERBOSE)
 

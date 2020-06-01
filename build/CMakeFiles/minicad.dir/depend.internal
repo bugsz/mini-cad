@@ -5,4 +5,5 @@ CMakeFiles/minicad.dir/main.c.obj
  ../include/extgraph.h
  ../include/genlib.h
  ../include/graphics.h
+ ../utils/linkedlist.h
  C:/Users/sz/Desktop/c-hw/mini-cad/main.c

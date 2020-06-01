@@ -39,15 +39,15 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "mini-cad::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-mini-cad-Release-33c2d8c568443612b775.json",
-					"name" : "mini-cad",
+					"id" : "cad_lib::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-cad_lib-Release-b1898bce7da1fe8d7713.json",
+					"name" : "cad_lib",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "minicad::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-minicad-Release-d83415a1ae6f68636220.json",
+					"jsonFile" : "target-minicad-Release-0fffbe77979ce2727e70.json",
 					"name" : "minicad",
 					"projectIndex" : 0
 				}

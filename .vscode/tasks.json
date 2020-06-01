@@ -14,6 +14,7 @@
 				"${fileDirname}/include/random.c",
 				"${fileDirname}/include/simpio.c",
 				"${fileDirname}/include/strlib.c",
+				"${fileDirname}/utils/linkedlist.c",
 				"-o",
 				"${fileDirname}\\${fileBasenameNoExtension}.exe"
 			],

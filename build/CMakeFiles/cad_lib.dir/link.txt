@@ -1,0 +1,2 @@
+C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\ar.exe qc libcad_lib.a  CMakeFiles/cad_lib.dir/include/exceptio.c.obj CMakeFiles/cad_lib.dir/include/genlib.c.obj CMakeFiles/cad_lib.dir/include/graphics.c.obj CMakeFiles/cad_lib.dir/include/random.c.obj CMakeFiles/cad_lib.dir/include/simpio.c.obj CMakeFiles/cad_lib.dir/include/strlib.c.obj CMakeFiles/cad_lib.dir/utils/acllib.c.obj CMakeFiles/cad_lib.dir/utils/linkedlist.c.obj CMakeFiles/cad_lib.dir/utils/list.c.obj
+C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\ranlib.exe libcad_lib.a

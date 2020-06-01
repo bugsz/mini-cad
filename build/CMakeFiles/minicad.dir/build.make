@@ -99,7 +99,7 @@ minicad_EXTERNAL_OBJECTS =
 
 minicad.exe: CMakeFiles/minicad.dir/main.c.obj
 minicad.exe: CMakeFiles/minicad.dir/build.make
-minicad.exe: libmini-cad.a
+minicad.exe: libcad_lib.a
 minicad.exe: CMakeFiles/minicad.dir/linklibs.rsp
 minicad.exe: CMakeFiles/minicad.dir/objects1.rsp
 minicad.exe: CMakeFiles/minicad.dir/link.txt

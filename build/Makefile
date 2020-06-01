@@ -130,17 +130,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named mini-cad
+# Target rules for targets named cad_lib
 
 # Build rule for target.
-mini-cad: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 mini-cad
-.PHONY : mini-cad
+cad_lib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 cad_lib
+.PHONY : cad_lib
 
 # fast build rule for target.
-mini-cad/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/build
-.PHONY : mini-cad/fast
+cad_lib/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/build
+.PHONY : cad_lib/fast
 
 #=============================================================================
 # Target rules for targets named minicad
@@ -161,7 +161,7 @@ include/exceptio.obj: include/exceptio.c.obj
 
 # target to build an object file
 include/exceptio.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/exceptio.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/exceptio.c.obj
 .PHONY : include/exceptio.c.obj
 
 include/exceptio.i: include/exceptio.c.i
@@ -170,7 +170,7 @@ include/exceptio.i: include/exceptio.c.i
 
 # target to preprocess a source file
 include/exceptio.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/exceptio.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/exceptio.c.i
 .PHONY : include/exceptio.c.i
 
 include/exceptio.s: include/exceptio.c.s
@@ -179,7 +179,7 @@ include/exceptio.s: include/exceptio.c.s
 
 # target to generate assembly for a file
 include/exceptio.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/exceptio.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/exceptio.c.s
 .PHONY : include/exceptio.c.s
 
 include/genlib.obj: include/genlib.c.obj
@@ -188,7 +188,7 @@ include/genlib.obj: include/genlib.c.obj
 
 # target to build an object file
 include/genlib.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/genlib.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/genlib.c.obj
 .PHONY : include/genlib.c.obj
 
 include/genlib.i: include/genlib.c.i
@@ -197,7 +197,7 @@ include/genlib.i: include/genlib.c.i
 
 # target to preprocess a source file
 include/genlib.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/genlib.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/genlib.c.i
 .PHONY : include/genlib.c.i
 
 include/genlib.s: include/genlib.c.s
@@ -206,7 +206,7 @@ include/genlib.s: include/genlib.c.s
 
 # target to generate assembly for a file
 include/genlib.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/genlib.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/genlib.c.s
 .PHONY : include/genlib.c.s
 
 include/graphics.obj: include/graphics.c.obj
@@ -215,7 +215,7 @@ include/graphics.obj: include/graphics.c.obj
 
 # target to build an object file
 include/graphics.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/graphics.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/graphics.c.obj
 .PHONY : include/graphics.c.obj
 
 include/graphics.i: include/graphics.c.i
@@ -224,7 +224,7 @@ include/graphics.i: include/graphics.c.i
 
 # target to preprocess a source file
 include/graphics.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/graphics.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/graphics.c.i
 .PHONY : include/graphics.c.i
 
 include/graphics.s: include/graphics.c.s
@@ -233,7 +233,7 @@ include/graphics.s: include/graphics.c.s
 
 # target to generate assembly for a file
 include/graphics.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/graphics.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/graphics.c.s
 .PHONY : include/graphics.c.s
 
 include/random.obj: include/random.c.obj
@@ -242,7 +242,7 @@ include/random.obj: include/random.c.obj
 
 # target to build an object file
 include/random.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/random.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/random.c.obj
 .PHONY : include/random.c.obj
 
 include/random.i: include/random.c.i
@@ -251,7 +251,7 @@ include/random.i: include/random.c.i
 
 # target to preprocess a source file
 include/random.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/random.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/random.c.i
 .PHONY : include/random.c.i
 
 include/random.s: include/random.c.s
@@ -260,7 +260,7 @@ include/random.s: include/random.c.s
 
 # target to generate assembly for a file
 include/random.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/random.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/random.c.s
 .PHONY : include/random.c.s
 
 include/simpio.obj: include/simpio.c.obj
@@ -269,7 +269,7 @@ include/simpio.obj: include/simpio.c.obj
 
 # target to build an object file
 include/simpio.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/simpio.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/simpio.c.obj
 .PHONY : include/simpio.c.obj
 
 include/simpio.i: include/simpio.c.i
@@ -278,7 +278,7 @@ include/simpio.i: include/simpio.c.i
 
 # target to preprocess a source file
 include/simpio.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/simpio.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/simpio.c.i
 .PHONY : include/simpio.c.i
 
 include/simpio.s: include/simpio.c.s
@@ -287,7 +287,7 @@ include/simpio.s: include/simpio.c.s
 
 # target to generate assembly for a file
 include/simpio.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/simpio.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/simpio.c.s
 .PHONY : include/simpio.c.s
 
 include/strlib.obj: include/strlib.c.obj
@@ -296,7 +296,7 @@ include/strlib.obj: include/strlib.c.obj
 
 # target to build an object file
 include/strlib.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/strlib.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/strlib.c.obj
 .PHONY : include/strlib.c.obj
 
 include/strlib.i: include/strlib.c.i
@@ -305,7 +305,7 @@ include/strlib.i: include/strlib.c.i
 
 # target to preprocess a source file
 include/strlib.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/strlib.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/strlib.c.i
 .PHONY : include/strlib.c.i
 
 include/strlib.s: include/strlib.c.s
@@ -314,7 +314,7 @@ include/strlib.s: include/strlib.c.s
 
 # target to generate assembly for a file
 include/strlib.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\mini-cad.dir\build.make CMakeFiles/mini-cad.dir/include/strlib.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/include/strlib.c.s
 .PHONY : include/strlib.c.s
 
 main.obj: main.c.obj
@@ -344,6 +344,87 @@ main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\minicad.dir\build.make CMakeFiles/minicad.dir/main.c.s
 .PHONY : main.c.s
 
+utils/acllib.obj: utils/acllib.c.obj
+
+.PHONY : utils/acllib.obj
+
+# target to build an object file
+utils/acllib.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/utils/acllib.c.obj
+.PHONY : utils/acllib.c.obj
+
+utils/acllib.i: utils/acllib.c.i
+
+.PHONY : utils/acllib.i
+
+# target to preprocess a source file
+utils/acllib.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/utils/acllib.c.i
+.PHONY : utils/acllib.c.i
+
+utils/acllib.s: utils/acllib.c.s
+
+.PHONY : utils/acllib.s
+
+# target to generate assembly for a file
+utils/acllib.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/utils/acllib.c.s
+.PHONY : utils/acllib.c.s
+
+utils/linkedlist.obj: utils/linkedlist.c.obj
+
+.PHONY : utils/linkedlist.obj
+
+# target to build an object file
+utils/linkedlist.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/utils/linkedlist.c.obj
+.PHONY : utils/linkedlist.c.obj
+
+utils/linkedlist.i: utils/linkedlist.c.i
+
+.PHONY : utils/linkedlist.i
+
+# target to preprocess a source file
+utils/linkedlist.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/utils/linkedlist.c.i
+.PHONY : utils/linkedlist.c.i
+
+utils/linkedlist.s: utils/linkedlist.c.s
+
+.PHONY : utils/linkedlist.s
+
+# target to generate assembly for a file
+utils/linkedlist.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/utils/linkedlist.c.s
+.PHONY : utils/linkedlist.c.s
+
+utils/list.obj: utils/list.c.obj
+
+.PHONY : utils/list.obj
+
+# target to build an object file
+utils/list.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/utils/list.c.obj
+.PHONY : utils/list.c.obj
+
+utils/list.i: utils/list.c.i
+
+.PHONY : utils/list.i
+
+# target to preprocess a source file
+utils/list.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/utils/list.c.i
+.PHONY : utils/list.c.i
+
+utils/list.s: utils/list.c.s
+
+.PHONY : utils/list.s
+
+# target to generate assembly for a file
+utils/list.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cad_lib.dir\build.make CMakeFiles/cad_lib.dir/utils/list.c.s
+.PHONY : utils/list.c.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -352,7 +433,7 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... mini-cad
+	@echo ... cad_lib
 	@echo ... minicad
 	@echo ... include/exceptio.obj
 	@echo ... include/exceptio.i
@@ -375,6 +456,15 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... utils/acllib.obj
+	@echo ... utils/acllib.i
+	@echo ... utils/acllib.s
+	@echo ... utils/linkedlist.obj
+	@echo ... utils/linkedlist.i
+	@echo ... utils/linkedlist.s
+	@echo ... utils/list.obj
+	@echo ... utils/list.i
+	@echo ... utils/list.s
 .PHONY : help
 
 

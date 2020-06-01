@@ -10,12 +10,17 @@ set(CMAKE_DEPENDS_CHECK_C
   "C:/Users/sz/Desktop/c-hw/mini-cad/include/random.c" "C:/Users/sz/Desktop/c-hw/mini-cad/build/CMakeFiles/mini-cad.dir/include/random.c.obj"
   "C:/Users/sz/Desktop/c-hw/mini-cad/include/simpio.c" "C:/Users/sz/Desktop/c-hw/mini-cad/build/CMakeFiles/mini-cad.dir/include/simpio.c.obj"
   "C:/Users/sz/Desktop/c-hw/mini-cad/include/strlib.c" "C:/Users/sz/Desktop/c-hw/mini-cad/build/CMakeFiles/mini-cad.dir/include/strlib.c.obj"
+  "C:/Users/sz/Desktop/c-hw/mini-cad/utils/acllib.c" "C:/Users/sz/Desktop/c-hw/mini-cad/build/CMakeFiles/mini-cad.dir/utils/acllib.c.obj"
+  "C:/Users/sz/Desktop/c-hw/mini-cad/utils/linkedlist.c" "C:/Users/sz/Desktop/c-hw/mini-cad/build/CMakeFiles/mini-cad.dir/utils/linkedlist.c.obj"
+  "C:/Users/sz/Desktop/c-hw/mini-cad/utils/list.c" "C:/Users/sz/Desktop/c-hw/mini-cad/build/CMakeFiles/mini-cad.dir/utils/list.c.obj"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH
+  "../"
   "../include"
+  "../utils"
   )
 
 # Targets to which this target links.

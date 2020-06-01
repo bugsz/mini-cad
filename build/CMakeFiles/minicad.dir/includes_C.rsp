@@ -1,1 +1,1 @@
--IC:/Users/sz/Desktop/c-hw/mini-cad/include 
+-IC:/Users/sz/Desktop/c-hw/mini-cad -IC:/Users/sz/Desktop/c-hw/mini-cad/include -IC:/Users/sz/Desktop/c-hw/mini-cad/utils 

@@ -3,7 +3,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "libmini-cad.a"
+			"path" : "libcad_lib.a"
 		}
 	],
 	"backtrace" : 1,
@@ -26,13 +26,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 7,
+				"line" : 9,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 9,
+				"line" : 12,
 				"parent" : 0
 			}
 		]
@@ -50,7 +50,15 @@
 			[
 				{
 					"backtrace" : 2,
+					"path" : "C:/Users/sz/Desktop/c-hw/mini-cad"
+				},
+				{
+					"backtrace" : 2,
 					"path" : "C:/Users/sz/Desktop/c-hw/mini-cad/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/sz/Desktop/c-hw/mini-cad/utils"
 				}
 			],
 			"language" : "C",
@@ -61,13 +69,16 @@
 				2,
 				3,
 				4,
-				5
+				5,
+				6,
+				7,
+				8
 			]
 		}
 	],
-	"id" : "mini-cad::@6890427a1f51a3e7e1df",
-	"name" : "mini-cad",
-	"nameOnDisk" : "libmini-cad.a",
+	"id" : "cad_lib::@6890427a1f51a3e7e1df",
+	"name" : "cad_lib",
+	"nameOnDisk" : "libcad_lib.a",
 	"paths" : 
 	{
 		"build" : ".",
@@ -84,7 +95,10 @@
 				2,
 				3,
 				4,
-				5
+				5,
+				6,
+				7,
+				8
 			]
 		}
 	],
@@ -124,6 +138,24 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "include/strlib.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "utils/acllib.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "utils/linkedlist.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "utils/list.c",
 			"sourceGroupIndex" : 0
 		}
 	],

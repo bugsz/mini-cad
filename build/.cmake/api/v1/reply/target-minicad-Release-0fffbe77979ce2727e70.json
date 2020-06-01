@@ -29,19 +29,19 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 13,
+				"line" : 18,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 14,
+				"line" : 19,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 9,
+				"line" : 12,
 				"parent" : 0
 			}
 		]
@@ -59,7 +59,15 @@
 			[
 				{
 					"backtrace" : 3,
+					"path" : "C:/Users/sz/Desktop/c-hw/mini-cad"
+				},
+				{
+					"backtrace" : 3,
 					"path" : "C:/Users/sz/Desktop/c-hw/mini-cad/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "C:/Users/sz/Desktop/c-hw/mini-cad/utils"
 				}
 			],
 			"language" : "C",
@@ -73,7 +81,7 @@
 	[
 		{
 			"backtrace" : 2,
-			"id" : "mini-cad::@6890427a1f51a3e7e1df"
+			"id" : "cad_lib::@6890427a1f51a3e7e1df"
 		}
 	],
 	"id" : "minicad::@6890427a1f51a3e7e1df",
@@ -91,7 +99,7 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "libmini-cad.a",
+				"fragment" : "libcad_lib.a",
 				"role" : "libraries"
 			},
 			{

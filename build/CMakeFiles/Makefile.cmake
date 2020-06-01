@@ -50,6 +50,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/mini-cad.dir/DependInfo.cmake"
+  "CMakeFiles/cad_lib.dir/DependInfo.cmake"
   "CMakeFiles/minicad.dir/DependInfo.cmake"
   )

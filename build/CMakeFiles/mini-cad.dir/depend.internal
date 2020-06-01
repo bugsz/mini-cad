@@ -31,3 +31,12 @@ CMakeFiles/mini-cad.dir/include/strlib.c.obj
  C:/Users/sz/Desktop/c-hw/mini-cad/include/genlib.h
  C:/Users/sz/Desktop/c-hw/mini-cad/include/strlib.c
  C:/Users/sz/Desktop/c-hw/mini-cad/include/strlib.h
+CMakeFiles/mini-cad.dir/utils/acllib.c.obj
+ C:/Users/sz/Desktop/c-hw/mini-cad/utils/acllib.c
+ C:/Users/sz/Desktop/c-hw/mini-cad/utils/acllib.h
+CMakeFiles/mini-cad.dir/utils/linkedlist.c.obj
+ C:/Users/sz/Desktop/c-hw/mini-cad/utils/linkedlist.c
+ C:/Users/sz/Desktop/c-hw/mini-cad/utils/linkedlist.h
+CMakeFiles/mini-cad.dir/utils/list.c.obj
+ C:/Users/sz/Desktop/c-hw/mini-cad/utils/list.c
+ C:/Users/sz/Desktop/c-hw/mini-cad/utils/list.h

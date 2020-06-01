@@ -22,13 +22,33 @@ stddef.h
 
 ../include/graphics.h
 
+../utils/linkedlist.h
+genlib.h
+../utils/genlib.h
+
 C:/Users/sz/Desktop/c-hw/mini-cad/main.c
 extgraph.h
 C:/Users/sz/Desktop/c-hw/mini-cad/extgraph.h
 graphics.h
 C:/Users/sz/Desktop/c-hw/mini-cad/graphics.h
+linkedlist.h
+C:/Users/sz/Desktop/c-hw/mini-cad/linkedlist.h
 stdio.h
 -
 math.h
+-
+windows.h
+-
+olectl.h
+-
+mmsystem.h
+-
+wingdi.h
+-
+ole2.h
+-
+ocidl.h
+-
+winuser.h
 -
 
