@@ -1,0 +1,4 @@
+C:/Users/sz/Desktop/c-hw/mini-cad/build/CMakeFiles/mini-cad.dir
+C:/Users/sz/Desktop/c-hw/mini-cad/build/CMakeFiles/minicad.dir
+C:/Users/sz/Desktop/c-hw/mini-cad/build/CMakeFiles/edit_cache.dir
+C:/Users/sz/Desktop/c-hw/mini-cad/build/CMakeFiles/rebuild_cache.dir

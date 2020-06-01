@@ -1,0 +1,37 @@
+[
+{
+  "directory": "C:/Users/sz/Desktop/c-hw/mini-cad/build",
+  "command": "gcc  @CMakeFiles/mini-cad.dir/includes_C.rsp -O3 -DNDEBUG   -o CMakeFiles\\mini-cad.dir\\include\\exceptio.c.obj   -c C:\\Users\\sz\\Desktop\\c-hw\\mini-cad\\include\\exceptio.c",
+  "file": "C:/Users/sz/Desktop/c-hw/mini-cad/include/exceptio.c"
+},
+{
+  "directory": "C:/Users/sz/Desktop/c-hw/mini-cad/build",
+  "command": "gcc  @CMakeFiles/mini-cad.dir/includes_C.rsp -O3 -DNDEBUG   -o CMakeFiles\\mini-cad.dir\\include\\genlib.c.obj   -c C:\\Users\\sz\\Desktop\\c-hw\\mini-cad\\include\\genlib.c",
+  "file": "C:/Users/sz/Desktop/c-hw/mini-cad/include/genlib.c"
+},
+{
+  "directory": "C:/Users/sz/Desktop/c-hw/mini-cad/build",
+  "command": "gcc  @CMakeFiles/mini-cad.dir/includes_C.rsp -O3 -DNDEBUG   -o CMakeFiles\\mini-cad.dir\\include\\graphics.c.obj   -c C:\\Users\\sz\\Desktop\\c-hw\\mini-cad\\include\\graphics.c",
+  "file": "C:/Users/sz/Desktop/c-hw/mini-cad/include/graphics.c"
+},
+{
+  "directory": "C:/Users/sz/Desktop/c-hw/mini-cad/build",
+  "command": "gcc  @CMakeFiles/mini-cad.dir/includes_C.rsp -O3 -DNDEBUG   -o CMakeFiles\\mini-cad.dir\\include\\random.c.obj   -c C:\\Users\\sz\\Desktop\\c-hw\\mini-cad\\include\\random.c",
+  "file": "C:/Users/sz/Desktop/c-hw/mini-cad/include/random.c"
+},
+{
+  "directory": "C:/Users/sz/Desktop/c-hw/mini-cad/build",
+  "command": "gcc  @CMakeFiles/mini-cad.dir/includes_C.rsp -O3 -DNDEBUG   -o CMakeFiles\\mini-cad.dir\\include\\simpio.c.obj   -c C:\\Users\\sz\\Desktop\\c-hw\\mini-cad\\include\\simpio.c",
+  "file": "C:/Users/sz/Desktop/c-hw/mini-cad/include/simpio.c"
+},
+{
+  "directory": "C:/Users/sz/Desktop/c-hw/mini-cad/build",
+  "command": "gcc  @CMakeFiles/mini-cad.dir/includes_C.rsp -O3 -DNDEBUG   -o CMakeFiles\\mini-cad.dir\\include\\strlib.c.obj   -c C:\\Users\\sz\\Desktop\\c-hw\\mini-cad\\include\\strlib.c",
+  "file": "C:/Users/sz/Desktop/c-hw/mini-cad/include/strlib.c"
+},
+{
+  "directory": "C:/Users/sz/Desktop/c-hw/mini-cad/build",
+  "command": "gcc  @CMakeFiles/minicad.dir/includes_C.rsp -O3 -DNDEBUG   -o CMakeFiles\\minicad.dir\\main.c.obj   -c C:\\Users\\sz\\Desktop\\c-hw\\mini-cad\\main.c",
+  "file": "C:/Users/sz/Desktop/c-hw/mini-cad/main.c"
+}
+]

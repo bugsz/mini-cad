@@ -1,0 +1,3 @@
+"E:\program files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\minicad.dir/objects.a
+C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\ar.exe cr CMakeFiles\minicad.dir/objects.a @CMakeFiles\minicad.dir\objects1.rsp
+gcc -O3 -DNDEBUG   -Wl,--whole-archive CMakeFiles\minicad.dir/objects.a -Wl,--no-whole-archive  -o minicad.exe -Wl,--out-implib,libminicad.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\minicad.dir\linklibs.rsp

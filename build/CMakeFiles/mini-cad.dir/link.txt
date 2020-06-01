@@ -1,0 +1,2 @@
+C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\ar.exe qc libmini-cad.a  CMakeFiles/mini-cad.dir/include/exceptio.c.obj CMakeFiles/mini-cad.dir/include/genlib.c.obj CMakeFiles/mini-cad.dir/include/graphics.c.obj CMakeFiles/mini-cad.dir/include/random.c.obj CMakeFiles/mini-cad.dir/include/simpio.c.obj CMakeFiles/mini-cad.dir/include/strlib.c.obj
+C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\ranlib.exe libmini-cad.a

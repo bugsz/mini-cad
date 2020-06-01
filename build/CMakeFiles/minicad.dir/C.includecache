@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/extgraph.h
+genlib.h
+../include/genlib.h
+graphics.h
+../include/graphics.h
+
+../include/genlib.h
+stdio.h
+-
+stdlib.h
+-
+stddef.h
+-
+
+../include/graphics.h
+
+C:/Users/sz/Desktop/c-hw/mini-cad/main.c
+extgraph.h
+C:/Users/sz/Desktop/c-hw/mini-cad/extgraph.h
+graphics.h
+C:/Users/sz/Desktop/c-hw/mini-cad/graphics.h
+stdio.h
+-
+math.h
+-
+
