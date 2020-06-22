@@ -181,6 +181,18 @@ void new_mouse_event(int x, int y, int button, int event)
                         update_scene();
                         break;
                     }
+                    case ELLIPSE:
+                    {
+                        SetEraseMode(TRUE);
+                        draw_shape(tmpEll);
+
+                        SetEraseMode(FALSE);
+                        tmpEll->dx = fabs(tmpEll->cx-nowx);
+                        tmpEll->dy = fabs(tmpEll->cy-nowy);
+                        draw_shape(tmpEll);
+                        update_scene();
+                        break;
+                    }
 
                 }
             }
@@ -201,6 +213,12 @@ void new_mouse_event(int x, int y, int button, int event)
                     }
                     case ELLIPSE:
                     {
+                        SetEraseMode(TRUE);
+                        draw_shape(selectedEll);
+                        SetEraseMode(FALSE);
+                        selectedEll->cx += dx;
+                        selectedEll->cy += dy;
+                        draw_shape(selectedEll);
                         break;
                     }
                     case RECTANGLE:
@@ -231,6 +249,12 @@ void new_mouse_event(int x, int y, int button, int event)
                     }
                     case ELLIPSE:
                     {
+                        SetEraseMode(TRUE);
+                        draw_shape(selectedEll);
+                        SetEraseMode(FALSE);
+                        selectedEll->dx = fabs(selectedEll->cx-nowx);
+                        selectedEll->dy = fabs(selectedEll->cy-nowy);
+                        draw_shape(selectedEll);
                         break;
                     }
                     case RECTANGLE:
@@ -297,6 +321,7 @@ void keyboard_event(int key, int event)
         default:
             break;
     }
+    display_type();
 }
 
 void store_shape(double x, double y)
@@ -309,6 +334,7 @@ void store_shape(double x, double y)
             tmpEll->cx = x;
             tmpEll->cy = y;
             tmpEll->dx = tmpEll->dy = 0;
+            tmpEll->selected = FALSE;
             break;
         }
 
@@ -319,7 +345,6 @@ void store_shape(double x, double y)
             tmpCir->cy = y;
             tmpCir->r = 0;
             tmpCir->selected = FALSE;
-            //InsertNode(shape[CIRCLE],NULL,tmpCir);
             break;
         }
 
@@ -348,6 +373,9 @@ void draw_shape(void *shapePtr)
         case ELLIPSE:
         {
             EllipsePtr p = (EllipsePtr)shapePtr;
+            if(p->selected) SetPenColor("RED");
+            MovePen(p->cx + p->dx, p->cy);
+            DrawEllipticalArc(p->dx, p->dy, 0, 360);
             break;
         }
         case CIRCLE:
@@ -403,6 +431,12 @@ void shape_dist(void *shapePtr)
         case ELLIPSE:
         {
             EllipsePtr p = (EllipsePtr)shapePtr;
+            if(len(nowx-p->cx, nowy-p->cy) < minDist)
+            {
+                minDist = len(nowx-p->cx, nowy-p->cy);
+                selectedEll = p;
+                selectMode = ELLIPSE;
+            }
             break;
         }
 
