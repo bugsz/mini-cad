@@ -133,6 +133,7 @@ void new_mouse_event(int x, int y, int button, int event)
             {
                 if(!selectMode)
                 {
+                    displayMode = 3;
                     get_nearest();     //获取最近的那个图形 然后设置selectedshape
                     update_scene();
                 }
@@ -165,7 +166,7 @@ void new_mouse_event(int x, int y, int button, int event)
             
         case MOUSEMOVE:
         {
-            if(displayMode == 1)
+            if(displayMode == 1 && !selectMode)
             {
                 //TODO: 添加其他图形
                 switch(shapeType)
@@ -205,13 +206,12 @@ void new_mouse_event(int x, int y, int button, int event)
                         update_scene();
                         break;
                     }
-
                 }
             }
 
             if(displayMode == 2 && selectMode)
             {
-                switch(shapeType)
+                switch(selectMode)
                 {
                     case CIRCLE:
                     {
@@ -254,7 +254,7 @@ void new_mouse_event(int x, int y, int button, int event)
             if(displayMode == 3 && selectMode)  //拖动改变大小
             {
                 // TODO: 这种操作感觉不顺滑，能不能用相对位移来做
-                switch(shapeType)
+                switch(selectMode)
                 {
                     case CIRCLE:
                     {
@@ -392,39 +392,40 @@ void store_shape(double x, double y)
 
 void draw_shape(void *shapePtr)
 {
-    switch(shapeType)
-    {
-        case ELLIPSE:
+        switch(shapeType)
         {
-            EllipsePtr p = (EllipsePtr)shapePtr;
-            if(p->selected) SetPenColor("RED");
-            MovePen(p->cx + p->dx, p->cy);
-            DrawEllipticalArc(p->dx, p->dy, 0, 360);
-            break;
-        }
-        case CIRCLE:
-        {
-            CirclePtr p = (CirclePtr)shapePtr;
-            if(p->selected) SetPenColor("RED"); 
-            MovePen(p->cx + p->r, p->cy);
-            DrawArc(p->r,0,360);
-            break;
-        }
-        case RECTANGLE:
-        {
-            RectanglePtr p = (RectanglePtr)shapePtr;
-            if(p->selected) SetPenColor("RED");
-            MovePen(p->cx + p->dx, p->cy + p->dy);
-            DrawLine(-p->dx*2,0);
-            DrawLine(0,-p->dy*2);
-            DrawLine(p->dx*2,0);
-            DrawLine(0,p->dy*2);
-            break;
-        }
+            case ELLIPSE:
+            {
+                EllipsePtr p = (EllipsePtr)shapePtr;
+                if(p->selected) SetPenColor("RED");
+                MovePen(p->cx + p->dx, p->cy);
+                DrawEllipticalArc(p->dx, p->dy, 0, 360);
+                break;
+            }
+            case CIRCLE:
+            {
+                CirclePtr p = (CirclePtr)shapePtr;
+                if(p->selected) SetPenColor("RED"); 
+                MovePen(p->cx + p->r, p->cy);
+                DrawArc(p->r,0,360);
+                break;
+            }
+            case RECTANGLE:
+            {
+                RectanglePtr p = (RectanglePtr)shapePtr;
+                if(p->selected) SetPenColor("RED");
+                MovePen(p->cx + p->dx, p->cy + p->dy);
+                DrawLine(-p->dx*2,0);
+                DrawLine(0,-p->dy*2);
+                DrawLine(p->dx*2,0);
+                DrawLine(0,p->dy*2);
+                break;
+            }
 
-        case TEXT:
-            break;
-    }
+            case TEXT:
+                break;
+        }
+    
     SetPenColor("BLUE");
 }
 
@@ -444,8 +445,7 @@ void reset()
     display_type();
 }
 void update_scene()
-{ 
-
+{
     enum type tmpShape = shapeType;
     int i;
     for(i=1;i<=4;i++)
@@ -512,12 +512,12 @@ void get_nearest()
         shapeType = i;
         TraverseLinkedList(shape[i],shape_dist);
     }
-    selectedShape = (EllipsePtr)selectedEll;
+    if(minDist == 0x7fff) return ;
     if(selectMode == ELLIPSE) selectedEll->selected = TRUE;
     if(selectMode == CIRCLE) selectedCir->selected = TRUE;
     if(selectMode == RECTANGLE) selectedRec->selected = TRUE;
     if(selectMode == TEXT) selectedTxt->selected = TRUE;
-    shapeType = tmpShape;
+    shapeType = selectMode;
     
 }
 
