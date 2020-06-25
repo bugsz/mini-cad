@@ -193,6 +193,18 @@ void new_mouse_event(int x, int y, int button, int event)
                         update_scene();
                         break;
                     }
+                    case RECTANGLE:
+                    {
+                        SetEraseMode(TRUE);
+                        draw_shape(tmpRec);
+
+                        SetEraseMode(FALSE);
+                        tmpRec->dx = nowx-tmpRec->cx;
+                        tmpRec->dy = nowy-tmpRec->cy;
+                        draw_shape(tmpRec);
+                        update_scene();
+                        break;
+                    }
 
                 }
             }
@@ -223,6 +235,12 @@ void new_mouse_event(int x, int y, int button, int event)
                     }
                     case RECTANGLE:
                     {
+                        SetEraseMode(TRUE);
+                        draw_shape(selectedRec);
+                        SetEraseMode(FALSE);
+                        selectedRec->cx += dx;
+                        selectedRec->cy += dy;
+                        draw_shape(selectedRec);
                         break;
                     }
                     case TEXT:
@@ -259,6 +277,12 @@ void new_mouse_event(int x, int y, int button, int event)
                     }
                     case RECTANGLE:
                     {
+                        SetEraseMode(TRUE);
+                        draw_shape(selectedRec);
+                        SetEraseMode(FALSE);
+                        selectedRec->dx = selectedRec->cx-nowx;
+                        selectedRec->dy = selectedRec->cy-nowy;
+                        draw_shape(selectedRec);
                         break;
                     }
                     case TEXT:
@@ -387,7 +411,16 @@ void draw_shape(void *shapePtr)
             break;
         }
         case RECTANGLE:
+        {
+            RectanglePtr p = (RectanglePtr)shapePtr;
+            if(p->selected) SetPenColor("RED");
+            MovePen(p->cx + p->dx, p->cy + p->dy);
+            DrawLine(-p->dx*2,0);
+            DrawLine(0,-p->dy*2);
+            DrawLine(p->dx*2,0);
+            DrawLine(0,p->dy*2);
             break;
+        }
 
         case TEXT:
             break;
@@ -452,7 +485,16 @@ void shape_dist(void *shapePtr)
             break;
         }
         case RECTANGLE:
+        {
+            RectanglePtr p = (RectanglePtr)shapePtr;
+            if(len(nowx-p->cx, nowy-p->cy) < minDist)
+            {
+                minDist = len(nowx-p->cx,nowy-p->cy);
+                selectedRec = p;
+                selectMode = RECTANGLE;
+            }
             break;
+        }
 
         case TEXT:
             break;
