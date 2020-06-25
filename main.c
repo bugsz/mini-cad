@@ -133,6 +133,7 @@ void new_mouse_event(int x, int y, int button, int event)
             {
                 if(!selectMode)
                 {
+                    displayMode = 3;
                     get_nearest();     //获取最近的那个图形 然后设置selectedshape
                     update_scene();
                 }
@@ -165,7 +166,7 @@ void new_mouse_event(int x, int y, int button, int event)
             
         case MOUSEMOVE:
         {
-            if(displayMode == 1)
+            if(displayMode == 1 && !selectMode)
             {
                 //TODO: 添加其他图形
                 switch(shapeType)
@@ -181,13 +182,36 @@ void new_mouse_event(int x, int y, int button, int event)
                         update_scene();
                         break;
                     }
+                    case ELLIPSE:
+                    {
+                        SetEraseMode(TRUE);
+                        draw_shape(tmpEll);
 
+                        SetEraseMode(FALSE);
+                        tmpEll->dx = fabs(tmpEll->cx-nowx);
+                        tmpEll->dy = fabs(tmpEll->cy-nowy);
+                        draw_shape(tmpEll);
+                        update_scene();
+                        break;
+                    }
+                    case RECTANGLE:
+                    {
+                        SetEraseMode(TRUE);
+                        draw_shape(tmpRec);
+
+                        SetEraseMode(FALSE);
+                        tmpRec->dx = nowx-tmpRec->cx;
+                        tmpRec->dy = nowy-tmpRec->cy;
+                        draw_shape(tmpRec);
+                        update_scene();
+                        break;
+                    }
                 }
             }
 
             if(displayMode == 2 && selectMode)
             {
-                switch(shapeType)
+                switch(selectMode)
                 {
                     case CIRCLE:
                     {
@@ -201,10 +225,22 @@ void new_mouse_event(int x, int y, int button, int event)
                     }
                     case ELLIPSE:
                     {
+                        SetEraseMode(TRUE);
+                        draw_shape(selectedEll);
+                        SetEraseMode(FALSE);
+                        selectedEll->cx += dx;
+                        selectedEll->cy += dy;
+                        draw_shape(selectedEll);
                         break;
                     }
                     case RECTANGLE:
                     {
+                        SetEraseMode(TRUE);
+                        draw_shape(selectedRec);
+                        SetEraseMode(FALSE);
+                        selectedRec->cx += dx;
+                        selectedRec->cy += dy;
+                        draw_shape(selectedRec);
                         break;
                     }
                     case TEXT:
@@ -218,7 +254,7 @@ void new_mouse_event(int x, int y, int button, int event)
             if(displayMode == 3 && selectMode)  //拖动改变大小
             {
                 // TODO: 这种操作感觉不顺滑，能不能用相对位移来做
-                switch(shapeType)
+                switch(selectMode)
                 {
                     case CIRCLE:
                     {
@@ -231,10 +267,22 @@ void new_mouse_event(int x, int y, int button, int event)
                     }
                     case ELLIPSE:
                     {
+                        SetEraseMode(TRUE);
+                        draw_shape(selectedEll);
+                        SetEraseMode(FALSE);
+                        selectedEll->dx = fabs(selectedEll->cx-nowx);
+                        selectedEll->dy = fabs(selectedEll->cy-nowy);
+                        draw_shape(selectedEll);
                         break;
                     }
                     case RECTANGLE:
                     {
+                        SetEraseMode(TRUE);
+                        draw_shape(selectedRec);
+                        SetEraseMode(FALSE);
+                        selectedRec->dx = selectedRec->cx-nowx;
+                        selectedRec->dy = selectedRec->cy-nowy;
+                        draw_shape(selectedRec);
                         break;
                     }
                     case TEXT:
@@ -297,6 +345,7 @@ void keyboard_event(int key, int event)
         default:
             break;
     }
+    display_type();
 }
 
 void store_shape(double x, double y)
@@ -309,6 +358,7 @@ void store_shape(double x, double y)
             tmpEll->cx = x;
             tmpEll->cy = y;
             tmpEll->dx = tmpEll->dy = 0;
+            tmpEll->selected = FALSE;
             break;
         }
 
@@ -319,7 +369,6 @@ void store_shape(double x, double y)
             tmpCir->cy = y;
             tmpCir->r = 0;
             tmpCir->selected = FALSE;
-            //InsertNode(shape[CIRCLE],NULL,tmpCir);
             break;
         }
 
@@ -343,27 +392,40 @@ void store_shape(double x, double y)
 
 void draw_shape(void *shapePtr)
 {
-    switch(shapeType)
-    {
-        case ELLIPSE:
+        switch(shapeType)
         {
-            EllipsePtr p = (EllipsePtr)shapePtr;
-            break;
-        }
-        case CIRCLE:
-        {
-            CirclePtr p = (CirclePtr)shapePtr;
-            if(p->selected) SetPenColor("RED"); 
-            MovePen(p->cx + p->r, p->cy);
-            DrawArc(p->r,0,360);
-            break;
-        }
-        case RECTANGLE:
-            break;
+            case ELLIPSE:
+            {
+                EllipsePtr p = (EllipsePtr)shapePtr;
+                if(p->selected) SetPenColor("RED");
+                MovePen(p->cx + p->dx, p->cy);
+                DrawEllipticalArc(p->dx, p->dy, 0, 360);
+                break;
+            }
+            case CIRCLE:
+            {
+                CirclePtr p = (CirclePtr)shapePtr;
+                if(p->selected) SetPenColor("RED"); 
+                MovePen(p->cx + p->r, p->cy);
+                DrawArc(p->r,0,360);
+                break;
+            }
+            case RECTANGLE:
+            {
+                RectanglePtr p = (RectanglePtr)shapePtr;
+                if(p->selected) SetPenColor("RED");
+                MovePen(p->cx + p->dx, p->cy + p->dy);
+                DrawLine(-p->dx*2,0);
+                DrawLine(0,-p->dy*2);
+                DrawLine(p->dx*2,0);
+                DrawLine(0,p->dy*2);
+                break;
+            }
 
-        case TEXT:
-            break;
-    }
+            case TEXT:
+                break;
+        }
+    
     SetPenColor("BLUE");
 }
 
@@ -383,8 +445,7 @@ void reset()
     display_type();
 }
 void update_scene()
-{ 
-
+{
     enum type tmpShape = shapeType;
     int i;
     for(i=1;i<=4;i++)
@@ -403,6 +464,12 @@ void shape_dist(void *shapePtr)
         case ELLIPSE:
         {
             EllipsePtr p = (EllipsePtr)shapePtr;
+            if(len(nowx-p->cx, nowy-p->cy) < minDist)
+            {
+                minDist = len(nowx-p->cx, nowy-p->cy);
+                selectedEll = p;
+                selectMode = ELLIPSE;
+            }
             break;
         }
 
@@ -418,7 +485,16 @@ void shape_dist(void *shapePtr)
             break;
         }
         case RECTANGLE:
+        {
+            RectanglePtr p = (RectanglePtr)shapePtr;
+            if(len(nowx-p->cx, nowy-p->cy) < minDist)
+            {
+                minDist = len(nowx-p->cx,nowy-p->cy);
+                selectedRec = p;
+                selectMode = RECTANGLE;
+            }
             break;
+        }
 
         case TEXT:
             break;
@@ -436,12 +512,12 @@ void get_nearest()
         shapeType = i;
         TraverseLinkedList(shape[i],shape_dist);
     }
-    selectedShape = (EllipsePtr)selectedEll;
+    if(minDist == 0x7fff) return ;
     if(selectMode == ELLIPSE) selectedEll->selected = TRUE;
     if(selectMode == CIRCLE) selectedCir->selected = TRUE;
     if(selectMode == RECTANGLE) selectedRec->selected = TRUE;
     if(selectMode == TEXT) selectedTxt->selected = TRUE;
-    shapeType = tmpShape;
+    shapeType = selectMode;
     
 }
 
