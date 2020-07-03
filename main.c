@@ -12,7 +12,9 @@
 #include <ocidl.h>
 #include <winuser.h>
 
-enum type{ ELLIPSE=1,RECTANGLE,CIRCLE,TEXT }shapeType;
+enum type{ ELLIPSE=1,RECTANGLE,CIRCLE,TEXT,LINE}shapeType;
+#define BLINK 1               /* TimerID */
+#define BLINKms 300           /* Time interval */
 
 typedef struct EllipseNode
 {
@@ -44,67 +46,81 @@ CirclePtr tmpCir,selectedCir;
 typedef struct TextNode
 {
     double cx,cy;
+    double current_y;
     bool selected;
-    char str[10000];
+    int textlen;
+    int current;
+    bool isInsert;
+    char Text[10000];
 }*TextPtr;
-TextPtr tmpTxt,selectedTxt;
+TextPtr tmpTxt ,selectedTxt;
 
-//TODO: 数据结构定义补充
+typedef struct LineNode
+{
+    double cx, cy;
+    double dx, dy;
+    enum type t;
+    bool selected;
+}*LinePtr;
+LinePtr tmpLine,selectedLine;
 
-linkedlistADT shape[5];  //四种图形链表结构
-void *tmpShape, *selectedShape;
+linkedlistADT shape[6];             /* five linked-list structure for shapes */
+void *tmpShape, *selectedShape;     /* store newly created shape and selected shape */
+int displayMode;                    /* 0: non-display 1: new 2: move to change position 3: move to resize */
+int selectMode;                     /* 1-5: selected shape type 0: unselected */
+bool isHome;                        /* check if home page is displaying */
+double nowx, nowy, initx, inity, t_x, t_y; /* current position, initial position when left button is clicked, and position in text mode */
+double lastx, lasty;                /* calculate relative displacement in moving */
+double minDist;                     /* shortest distance */
+char typemapping[6][100] = {" ","Ellipse", "Rectangle", "Circle", "Text", "Line"};
+char statusmapping[6][100] = {"New", "Modify"};
 
-int displayMode;  //0：不显示 1：新图形模式 2：拖动改变位置 3：拖动改变大小
-int selectMode; //1-4:图形种类 0:未选中
-double nowx, nowy, initx, inity; //当前的坐标,以及左键按下时的初始坐标
-double lastx, lasty; //拖动过程中计算相对位移
-double minDist; //最短距离
-char typemapping[5][100] = {" ","Ellipse", "Rectangle", "Circle", "Text"};
-char statusmapping[5][100] = {"New", "Modify"};
+void init();                       /* data initialization */
+void store_shape(double, double);  /* store temporary shape into linked list */
+void draw_shape(void *shapePtr);   /* draw shapes */
+void update_scene();               /* redraw whole window */
+void reset();                      /* clean screen */
+void get_nearest();                /* find nearest shape */
+void shape_dist(void *shapePtr);   /* calculate distance from current position to center of shape */
+void new_mouse_event();            /* monitor mouse event */
+void keyboard_event();             /* monitor keyboard event */
+void display_type();               /* display current type */
+bool equalfun();                   /* check if two elements are the same */
+void PrintInstructions();          /* print instructions */
+void cancelTimer(int id);          /* timer function in text mode */
+void InitTimer(int TimerID);       /* timer function in text mode */
+void MyTimer(int timerID);         /* timer function in text mode */
+void startTimer(int id, int timeinterval);/* timer function in text mode */
+void InitText(double x, double y, char *Text);/* text initialization in text mode */
+void MyChar(char c);               /* input in text mode */
 
-//TODO: 目前只画出了圆形，还要补充其他形状
-//TODO: 做一个scene来提示各种操作
-//TODO: 选中，改变大小和删除功能
-
-void init(); //数据初始化
-void store_shape(double, double);  
-void draw_shape(void *shapePtr);   //画出图形
-void update_scene();               //重新绘制整个window
-void reset();                      //清屏
-void get_nearest();                //通过与中心点的距离找到最近的形状
-void shape_dist(void *shapePtr);   //找到与形状之间的最短距离
-void new_mouse_event();
-void keyboard_event();
-void display_type();
-bool equalfun();                   //用于比较两个元素是否相同
-/*
-void draw_circle();
-void draw_eclipse();
-void draw_rectangle();
-void draw_text();
-
-void (*draw[5])()= {NULL, draw_eclipse, draw_rectangle, draw_circle, draw_text};
-*/
-
-inline double len(double dx, double dy){ return sqrt(dx*dx+dy*dy); }
+double len(double dx, double dy){ return sqrt(dx*dx+dy*dy); }
 
 
 void Main()
 {
     init();
     InitGraphics();
+    PrintInstructions();
     display_type();
     SetPenColor("BLUE");
 
     registerMouseEvent(new_mouse_event);
     registerKeyboardEvent(keyboard_event);
+
+    registerCharEvent(MyChar);
+    registerTimerEvent(MyTimer);
+
+    startTimer(BLINK, BLINKms);
 }
 void init()
 {
     int i;
-    for(i=1;i<=4;i++) shape[i] = NewLinkedList();
+    for(i=1;i<=5;i++) shape[i] = NewLinkedList();
     selectMode = 0;
-    shapeType = CIRCLE;
+    isHome = TRUE;
+    tmpTxt = NULL;
+    shapeType = TEXT;
 }
 
 void new_mouse_event(int x, int y, int button, int event)
@@ -127,18 +143,18 @@ void new_mouse_event(int x, int y, int button, int event)
                     store_shape(nowx,nowy);
                     displayMode = 1;
                 }
-                else displayMode = 2;  //拖动改变位置
+                else displayMode = 2;  /* move to change position */
             }
             if(button == RIGHT_BUTTON)
             {
                 if(!selectMode)
                 {
                     displayMode = 3;
-                    get_nearest();     //获取最近的那个图形 然后设置selectedshape
+                    get_nearest();     /* get nearest shape then set selectedshape */
                     update_scene();
                 }
-                else displayMode = 3; //拖动改变大小
-            } 
+                else displayMode = 3; /* move to resize */
+            }
             break;
         }
 
@@ -146,36 +162,54 @@ void new_mouse_event(int x, int y, int button, int event)
         {
             if(button == LEFT_BUTTON)
             {
-                if(!selectMode)            //如果非选中模式就存下来
+                if (shapeType == TEXT)
+                {
+                    if(!selectMode)
+                    {
+                        t_x = ScaleXInches(x);
+                        t_y = ScaleYInches(y);
+                        InitTimer(BLINK);
+                        MovePen(t_x, t_y);
+                        displayMode = 0;
+                        break;
+                    }
+                    else{
+                        displayMode = 0;
+                        tmpTxt = selectedTxt;
+                    }
+                }
+                else if(!selectMode)            /* if it's unselected, then store it */
                 {
                     displayMode = 0;
-                    //InsertNode(shape[shapeType],NULL,tmpShape);
-                    
+
                     if(shapeType == CIRCLE)  InsertNode(shape[CIRCLE],NULL,tmpCir);
                     if(shapeType == ELLIPSE) InsertNode(shape[ELLIPSE],NULL,tmpEll);
                     if(shapeType == RECTANGLE) InsertNode(shape[RECTANGLE],NULL,tmpRec);
-                    if(shapeType == TEXT) InsertNode(shape[TEXT],NULL,tmpTxt);
-                    
+                    if(shapeType == LINE) InsertNode(shape[LINE],NULL,tmpLine);
+                    if(shapeType == TEXT)
+                    {
+                        /* delete previously stored tmp to update */
+                        DeleteNode(shape[TEXT], tmpTxt, equalfun);
+                        InsertNode(shape[TEXT],NULL,tmpTxt);
+                    }
                 }
-                else  displayMode = 0;  //如果是选中，那就直接跳过，停止改变，但是保留选中状态
+                else  displayMode = 0;  /* if selected, then skip it, but selectedMode remains unchanged */
 
             }
             if(button == RIGHT_BUTTON) displayMode = 0;
             break;
         }
-            
+
         case MOUSEMOVE:
         {
             if(displayMode == 1 && !selectMode)
             {
-                //TODO: 添加其他图形
                 switch(shapeType)
                 {
                     case CIRCLE:
                     {
                         SetEraseMode(TRUE);
                         draw_shape(tmpCir);
-
                         SetEraseMode(FALSE);
                         tmpCir->r = len(nowx-tmpCir->cx,nowy-tmpCir->cy);
                         draw_shape(tmpCir);
@@ -186,7 +220,6 @@ void new_mouse_event(int x, int y, int button, int event)
                     {
                         SetEraseMode(TRUE);
                         draw_shape(tmpEll);
-
                         SetEraseMode(FALSE);
                         tmpEll->dx = fabs(tmpEll->cx-nowx);
                         tmpEll->dy = fabs(tmpEll->cy-nowy);
@@ -198,11 +231,21 @@ void new_mouse_event(int x, int y, int button, int event)
                     {
                         SetEraseMode(TRUE);
                         draw_shape(tmpRec);
-
                         SetEraseMode(FALSE);
                         tmpRec->dx = nowx-tmpRec->cx;
                         tmpRec->dy = nowy-tmpRec->cy;
                         draw_shape(tmpRec);
+                        update_scene();
+                        break;
+                    }
+                    case LINE:
+                    {
+                        SetEraseMode(TRUE);
+                        draw_shape(tmpLine);
+                        SetEraseMode(FALSE);
+                        tmpLine->dx = nowx-tmpLine->cx;
+                        tmpLine->dy = nowy-tmpLine->cy;
+                        draw_shape(tmpLine);
                         update_scene();
                         break;
                     }
@@ -243,17 +286,40 @@ void new_mouse_event(int x, int y, int button, int event)
                         draw_shape(selectedRec);
                         break;
                     }
+                    case LINE:
+                    {
+                        SetEraseMode(TRUE);
+                        draw_shape(selectedLine);
+                        SetEraseMode(FALSE);
+                        selectedLine->cx += dx;
+                        selectedLine->cy += dy;
+                        draw_shape(selectedLine);
+                        break;
+                    }
                     case TEXT:
                     {
+                        MovePen(selectedTxt->cx, selectedTxt->cy);
+                        SetEraseMode(TRUE);
+                        StartFilledRegion(1);
+                        DrawLine(GetWindowWidth(), 0);
+                        DrawLine(0, GetFontHeight());
+                        DrawLine(-GetWindowWidth(), 0);
+                        DrawLine(0, -GetFontHeight());
+                        EndFilledRegion();
+                        SetEraseMode(FALSE);
+                        InitText(selectedTxt->cx, selectedTxt->cy, selectedTxt->Text);
+                        selectedTxt->cx += dx;
+                        selectedTxt->cy += dy;
+                        DeleteNode(shape[TEXT], selectedTxt, equalfun);
+                        InsertNode(shape[TEXT],NULL,selectedTxt);
                         break;
                     }
                 }
                 update_scene();
             }
 
-            if(displayMode == 3 && selectMode)  //拖动改变大小
+            if(displayMode == 3 && selectMode)  /* Move to resize */
             {
-                // TODO: 这种操作感觉不顺滑，能不能用相对位移来做
                 switch(selectMode)
                 {
                     case CIRCLE:
@@ -285,8 +351,15 @@ void new_mouse_event(int x, int y, int button, int event)
                         draw_shape(selectedRec);
                         break;
                     }
-                    case TEXT:
+                    case LINE:
                     {
+
+                        SetEraseMode(TRUE);
+                        draw_shape(selectedLine);
+                        SetEraseMode(FALSE);
+                        selectedLine->dx = nowx-selectedLine->cx;
+                        selectedLine->dy = nowy-selectedLine->cy;
+                        draw_shape(selectedLine);
                         break;
                     }
                 }
@@ -295,44 +368,145 @@ void new_mouse_event(int x, int y, int button, int event)
             break;
         }
     }
-    display_type();
 }
 
 void keyboard_event(int key, int event)
 {
-    switch(event)
+    if (shapeType == TEXT && tmpTxt != NULL)
     {
+        /* for char converting */
+        char str[2] = {0, 0};
+        /* keep for InitGraphics */
+        double memory_y = GetCurrentY();
+        /* stop blinking for now */
+        InitTimer(BLINK);
+
+        switch (event)
+        {
+            case KEY_DOWN:
+                switch (key)
+                {
+                    case VK_LEFT:
+                        /* boundary judging */
+                        sprintf(str, "%c", tmpTxt->Text[0]);
+                        if (GetCurrentX() >= TextStringWidth(str))
+                        {
+                            /* choose moving distance */
+                            if (tmpTxt->Text[tmpTxt->current - 1])
+                            {
+                                sprintf(str, "%c", tmpTxt->Text[tmpTxt->current - 1]);
+                                MovePen(GetCurrentX() - TextStringWidth(str), GetCurrentY());
+                            }
+                            else
+                            {
+                                MovePen(GetCurrentX() - TextStringWidth(&tmpTxt->Text[tmpTxt->textlen - 1]), GetCurrentY());
+                            }
+                            /* location update */
+                            tmpTxt->current--;
+                        }
+                        break;
+                    case VK_RIGHT:
+                        /* boundary judging */
+                        if (GetCurrentX() <= GetWindowWidth())
+                        {
+                            /* moving leftward */
+                            if (tmpTxt->Text[tmpTxt->current])
+                            {
+                                sprintf(str, "%c", tmpTxt->Text[tmpTxt->current]);
+                                MovePen(GetCurrentX() + TextStringWidth(str), GetCurrentY());
+                                /* location update */
+                                tmpTxt->current++;
+                            }
+                        }
+                        break;
+                    case VK_DELETE:
+                        /* boundary judging */
+                        if (tmpTxt->Text[tmpTxt->current])
+                        {
+                            /* text update */
+                            for (int i = tmpTxt->current; i < tmpTxt->textlen; i++)
+                            {
+                                tmpTxt->Text[i] = tmpTxt->Text[i + 1];
+                            }
+                            tmpTxt->textlen--;
+                            /* redraw */
+                            InitText(0, memory_y, tmpTxt->Text);
+                            MovePen(GetCurrentX() - TextStringWidth(&tmpTxt->Text[tmpTxt->current]), GetCurrentY());
+                        }
+                        break;
+                    case VK_INSERT:
+                        tmpTxt->isInsert = !tmpTxt->isInsert;
+
+                        
+                    default:
+                        break;
+                }
+            case KEY_UP:
+                tmpTxt->current_y = memory_y;
+                break;
+        }
+        /* blink again */
+        startTimer(BLINK, BLINKms);
+    }
+
+    switch (event) {
         case KEY_DOWN:
-            switch(key)
-            {
+            switch (key) {
                 case VK_F1:
                     shapeType = ELLIPSE;
+                    display_type();
                     break;
                 case VK_F2:
                     shapeType = RECTANGLE;
+                    display_type();
                     break;
                 case VK_F3:
                     shapeType = CIRCLE;
+                    display_type();
                     break;
                 case VK_F4:
                     shapeType = TEXT;
+                    display_type();
                     break;
-                case VK_ESCAPE:
-                {
-                    if(selectMode == CIRCLE) selectedCir->selected = FALSE;
-                    if(selectMode == ELLIPSE) selectedEll->selected = FALSE;
-                    if(selectMode == TEXT) selectedTxt->selected = FALSE;
-                    if(selectMode == RECTANGLE) selectedRec->selected = FALSE;
+                case VK_F5:
+                    shapeType = LINE;
+                    display_type();
+                    break;
+                case VK_F6:
+                    reset();
+                    break;
+                case VK_ESCAPE: {
+                    if (selectMode == CIRCLE) selectedCir->selected = FALSE;
+                    if (selectMode == ELLIPSE) selectedEll->selected = FALSE;
+                    if (selectMode == TEXT) selectedTxt->selected = FALSE;
+                    if (selectMode == RECTANGLE) selectedRec->selected = FALSE;
+                    if (selectMode == LINE) selectedLine->selected = FALSE;
                     selectMode = 0;
+                    display_type();
                     update_scene();
+                    break;
                 }
-                case 8:
+                case VK_HOME:
                 {
-                    if(!selectMode) break;
-                    if(selectMode == CIRCLE) DeleteNode(shape[CIRCLE],selectedCir, equalfun);
-                    if(selectMode == ELLIPSE) DeleteNode(shape[ELLIPSE],selectedEll, equalfun);
-                    if(selectMode == TEXT) DeleteNode(shape[TEXT],selectedTxt, equalfun);
-                    if(selectMode == RECTANGLE) DeleteNode(shape[RECTANGLE],selectedRec, equalfun);
+                    if (isHome){
+                        isHome = !isHome;
+                        reset();
+                        update_scene();
+                    }
+                    else{
+                        isHome = !isHome;
+                        reset();
+                        PrintInstructions();
+                    }
+                    break;
+                }
+                case 8: {
+                    if (!selectMode) break;
+                    if (selectMode == CIRCLE) DeleteNode(shape[CIRCLE], selectedCir, equalfun);
+                    if (selectMode == ELLIPSE) DeleteNode(shape[ELLIPSE], selectedEll, equalfun);
+                    if (selectMode == TEXT) DeleteNode(shape[TEXT], selectedTxt, equalfun);
+                    if (selectMode == RECTANGLE) DeleteNode(shape[RECTANGLE], selectedRec, equalfun);
+                    if (selectMode == LINE) DeleteNode(shape[LINE], selectedLine, equalfun);
                     selectMode = 0;
                     reset();
                     update_scene();
@@ -345,7 +519,7 @@ void keyboard_event(int key, int event)
         default:
             break;
     }
-    display_type();
+
 }
 
 void store_shape(double x, double y)
@@ -379,12 +553,32 @@ void store_shape(double x, double y)
             tmpRec->cy = y;
             tmpRec->dx = 0;
             tmpRec->dy = 0;
+            tmpRec->selected = FALSE;
+            break;
+        }
+
+        case LINE:
+        {
+            tmpLine = (LinePtr)malloc(sizeof(struct LineNode));
+            tmpLine->cx = x;
+            tmpLine->cy = y;
+            tmpLine->dx = 0;
+            tmpLine->dy = 0;
+            tmpLine->selected = FALSE;
             break;
         }
 
         case TEXT:
         {
-            break; 
+            tmpTxt = (TextPtr) malloc(sizeof(struct TextNode));
+            tmpTxt->cx = x;
+            tmpTxt->cy = y;
+            tmpTxt->current = 0;
+            tmpTxt->textlen = 0;
+            tmpTxt->isInsert = FALSE;
+            tmpTxt->selected = FALSE;
+            tmpTxt->current_y = y;
+            break;
         }
     }
 }
@@ -405,7 +599,7 @@ void draw_shape(void *shapePtr)
             case CIRCLE:
             {
                 CirclePtr p = (CirclePtr)shapePtr;
-                if(p->selected) SetPenColor("RED"); 
+                if(p->selected) SetPenColor("RED");
                 MovePen(p->cx + p->r, p->cy);
                 DrawArc(p->r,0,360);
                 break;
@@ -422,10 +616,25 @@ void draw_shape(void *shapePtr)
                 break;
             }
 
-            case TEXT:
+            case LINE:
+            {
+                LinePtr p = (LinePtr)shapePtr;
+                if(p->selected) SetPenColor("RED");
+                MovePen(p->cx, p->cy);
+                DrawLine(p->dx,p->dy);
                 break;
+            }
+
+            case TEXT:
+            {
+                TextPtr p = (TextPtr)shapePtr;
+                if(p->selected) SetPenColor("RED");
+                InitText(p->cx, p->cy, p->Text);
+                break;
+            }
+
         }
-    
+
     SetPenColor("BLUE");
 }
 
@@ -448,13 +657,14 @@ void update_scene()
 {
     enum type tmpShape = shapeType;
     int i;
-    for(i=1;i<=4;i++)
+    for(i=1;i<=5;i++)
     {
         shapeType = i;
         SetEraseMode(FALSE);
         TraverseLinkedList(shape[i],draw_shape);
     }
     shapeType = tmpShape;
+    PrintInstructions();
 }
 
 void shape_dist(void *shapePtr)
@@ -469,6 +679,7 @@ void shape_dist(void *shapePtr)
                 minDist = len(nowx-p->cx, nowy-p->cy);
                 selectedEll = p;
                 selectMode = ELLIPSE;
+                display_type();
             }
             break;
         }
@@ -481,6 +692,7 @@ void shape_dist(void *shapePtr)
                 minDist = len(nowx-p->cx,nowy-p->cy);
                 selectedCir = p;
                 selectMode = CIRCLE;
+                display_type();
             }
             break;
         }
@@ -492,13 +704,34 @@ void shape_dist(void *shapePtr)
                 minDist = len(nowx-p->cx,nowy-p->cy);
                 selectedRec = p;
                 selectMode = RECTANGLE;
+                display_type();
             }
             break;
         }
-
-        case TEXT:
+        case LINE:
+        {
+            LinePtr p = (LinePtr)shapePtr;
+            if(len(nowx-p->cx, nowy-p->cy) < minDist)
+            {
+                minDist = len(nowx-p->cx,nowy-p->cy);
+                selectedLine = p;
+                selectMode = LINE;
+                display_type();
+            }
             break;
-
+        }
+        case TEXT:
+        {
+            TextPtr p = (TextPtr)shapePtr;
+            if(len(nowx-p->cx, nowy-p->cy) < minDist)
+            {
+                minDist = len(nowx-p->cx,nowy-p->cy);
+                selectedTxt = p;
+                selectMode = TEXT;
+                display_type();
+            }
+            break;
+        }
     }
 }
 
@@ -507,7 +740,7 @@ void get_nearest()
     int i;
     enum type tmpShape = shapeType;
     minDist = 0x7fff;
-    for(i=1;i<=4;i++)
+    for(i=1;i<=5;i++)
     {
         shapeType = i;
         TraverseLinkedList(shape[i],shape_dist);
@@ -516,9 +749,15 @@ void get_nearest()
     if(selectMode == ELLIPSE) selectedEll->selected = TRUE;
     if(selectMode == CIRCLE) selectedCir->selected = TRUE;
     if(selectMode == RECTANGLE) selectedRec->selected = TRUE;
-    if(selectMode == TEXT) selectedTxt->selected = TRUE;
+    if(selectMode == LINE) selectedLine->selected = TRUE;
+    if(selectMode == TEXT)
+    {
+        selectedTxt->selected = TRUE;
+        tmpTxt = selectedTxt;
+        InitText(tmpTxt->cx, tmpTxt->current_y, tmpTxt->Text);
+    }
     shapeType = selectMode;
-    
+
 }
 
 void display_type()
@@ -527,18 +766,17 @@ void display_type()
 	StartFilledRegion(1);
 	MovePen(0,0);
 	DrawLine(0,0.5);
-	DrawLine(3,0);
+	DrawLine(7,0);
 	DrawLine(0,-0.5);
-	DrawLine(-3,0);
+	DrawLine(-7,0);
 	EndFilledRegion();
     SetEraseMode(FALSE);
 
     char c[100]="Current type: ";
     double tx = GetCurrentX(), ty = GetCurrentY();
     strcat(c,typemapping[shapeType]);
-    strcat(c,"/Current status: ");
+    strcat(c," / Current status: ");
     strcat(c,statusmapping[selectMode ? 1:0]);
-
 
     MovePen(0,0.1);
     DrawTextString(c);
@@ -549,3 +787,232 @@ bool equalfun(void *obj1, void *obj2)
 {
     return obj1 == obj2;
 }
+
+void InitTimer(int TimerID)
+{
+    if (shapeType == TEXT)
+    {
+        cancelTimer(TimerID);
+        SetEraseMode(TRUE);
+        DrawLine(0, GetFontHeight());
+        MovePen(GetCurrentX(), GetCurrentY() - GetFontHeight());
+        SetEraseMode(FALSE);
+    }
+}
+/* text reprint */
+void InitText(double x, double y, char *Text)
+{
+    if (shapeType == TEXT)
+    {
+        MovePen(x, y);
+        SetEraseMode(TRUE);
+        StartFilledRegion(1);
+        DrawLine(TextStringWidth(Text)+TextStringWidth("ab"), 0);
+        DrawLine(0, GetFontHeight());
+        DrawLine(-TextStringWidth(Text)-TextStringWidth("ab"), 0);
+        DrawLine(0, -GetFontHeight());
+
+        EndFilledRegion();
+        SetEraseMode(FALSE);
+        MovePen(x, y);
+        DrawTextString(Text);
+    }
+}
+/* Blink */
+void MyTimer(int timerID)
+{
+    if (shapeType == TEXT)
+    {
+        static bool isDisplay = TRUE;
+        if (isDisplay)
+        {
+            SetEraseMode(FALSE);
+        }
+        else
+        {
+            SetEraseMode(TRUE);
+        }
+        DrawLine(0, GetFontHeight());
+        MovePen(GetCurrentX(), GetCurrentY() - GetFontHeight());
+        isDisplay = !isDisplay;
+    }
+}
+
+void MyChar(char c)
+{
+    if (shapeType == TEXT)
+    {
+        /* keep for InitGraphics */
+        double memory_y = GetCurrentY();
+        /* stop blinking for now */
+        InitTimer(BLINK);
+        if (tmpTxt->selected==TRUE) SetPenColor("RED");
+        else     SetPenColor("BLUE");
+
+        switch (c)
+        {
+            /* Esc */
+            case 27:
+                break;
+            case '\r':
+            {
+                InsertNode(shape[TEXT],NULL,tmpTxt);
+                break;
+            }
+                /* backspace */
+            case 8:
+                if (tmpTxt->Text[tmpTxt->current - 1])
+                {
+                    /* delete */
+                    for (int i = tmpTxt->current - 1; i < tmpTxt->textlen; i++)
+                    {
+                        tmpTxt->Text[i] = tmpTxt->Text[i + 1];
+                    }
+                    tmpTxt->textlen--;
+                    /* redraw */
+                    if (tmpTxt->selected==TRUE) SetPenColor("RED");
+                    else     SetPenColor("BLUE");
+                    InitText(tmpTxt->cx, memory_y, tmpTxt->Text);
+                    MovePen(GetCurrentX() - TextStringWidth(&tmpTxt->Text[--tmpTxt->current]), GetCurrentY());
+                }
+                else
+                {
+                    /* only move leftward */
+                    keyboard_event(VK_LEFT, KEY_DOWN);
+                }
+                break;
+
+            case VK_F1:
+            case VK_F2:
+            case VK_F3:
+            case VK_F4:
+            case VK_F5:
+                break;
+
+
+            default:
+                /* add */
+                if (tmpTxt->current == tmpTxt->textlen)
+                {
+                    if (tmpTxt->selected==TRUE) SetPenColor("RED");
+                    else     SetPenColor("BLUE");
+                    tmpTxt->Text[tmpTxt->textlen++] = c;
+                    tmpTxt->Text[tmpTxt->textlen] = '\0';
+                    tmpTxt->current++;
+                    MovePen(tmpTxt->cx, tmpTxt->cy);
+                    DrawTextString(tmpTxt->Text);
+                }
+                    /* insert */
+                else
+                {
+                    /* text update */
+                    if (tmpTxt->isInsert)
+                    {
+                        tmpTxt->Text[tmpTxt->current] = c;
+                    }
+                    else
+                    {
+                        for (int i = tmpTxt->textlen; i >= tmpTxt->current; i--)
+                        {
+                            tmpTxt->Text[i + 1] = tmpTxt->Text[i];
+                        }
+                        tmpTxt->Text[++tmpTxt->textlen] = '\0';
+                        tmpTxt->Text[tmpTxt->current] = c;
+                    }
+                    /* redraw */
+                    if (tmpTxt->selected==TRUE) SetPenColor("RED");
+                    else     SetPenColor("BLUE");
+                    InitText(t_x, memory_y, tmpTxt->Text);
+                    MovePen(GetCurrentX() - TextStringWidth(&tmpTxt->Text[++tmpTxt->current]), GetCurrentY());
+                }
+                break;
+        }
+        /* blink again */
+        startTimer(BLINK, BLINKms);
+        tmpTxt->current_y = memory_y;
+    }
+}
+
+void PrintInstructions()
+{
+    double x, y;
+
+    x = 0;
+    y = GetWindowHeight() - 0.2;
+    string color = GetPenColor();
+    SetPenColor("Black");
+
+    MovePen(x,y);
+    DrawTextString("  ===Mini-CAD===  ");
+
+    y -= 0.2;
+    MovePen(x,y);
+
+    DrawTextString("  INSTRUCTIONS");
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("  1. Drag the left mouse button to create a new shape; ");
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("      NOTE: Under TEXT mode, press ENTER to save changes; ");
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("  2. Under unselected status, right-click to select an object; ");
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("  3. After the selected object turned red: ");
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("      Move the object: drag the left mouse button; ");
+
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("      Change the shape: drag the right mouse button; ");
+
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("  4. Delete shape: press DELETE key;");
+
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("  5. Deselect: press ESC key;");
+
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("  6. Enter/exit instructions page: press HOME key.");
+
+    y -= 0.2;
+    MovePen(x,y);
+
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("  Switch the shape mode: ");
+
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("       Ellipse: F1");
+
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("  Rectangle: F2");
+
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("         Circle: F3");
+
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("           Text: F4");
+
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("           Line: F5");
+
+    y -= 0.2;
+    MovePen(x,y);
+    DrawTextString("         Reset: F6");
+    SetPenColor(color);
+
+    return;
+}
+
